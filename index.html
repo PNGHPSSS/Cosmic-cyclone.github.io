@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COSMIC CYCLONE — องค์กรลับ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Sarabun:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F6F7FC;
+    --bg-alt: #EEF0FB;
+    --ink: #15172E;
+    --ink-soft: #565A80;
+    --violet: #5B4FE9;
+    --violet-deep: #3D31C9;
+    --cyan: #00CFC1;
+    --pink: #FF5C8A;
+    --line: #DEE1F5;
+    --white: #FFFFFF;
+    --radius: 18px;
+    --font-display: 'Space Grotesk', 'Sarabun', sans-serif;
+    --font-body: 'Sarabun', 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important;}
+  }
+
+  /* ---------- NAV ---------- */
+  .navbar{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 32px;
+    background:rgba(246,247,252,0.82);
+    backdrop-filter:blur(14px);
+    border-bottom:1px solid var(--line);
+  }
+  .brand{
+    font-family:var(--font-display);
+    font-weight:700;
+    font-size:1.15rem;
+    letter-spacing:0.02em;
+    display:flex; align-items:center; gap:10px;
+  }
+  .brand-mark{
+    width:22px; height:22px; border-radius:50%;
+    background:conic-gradient(from 90deg, var(--violet), var(--cyan), var(--pink), var(--violet));
+    animation:spin 6s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .nav-links{display:flex; gap:6px; background:var(--white); padding:5px; border-radius:999px; border:1px solid var(--line);}
+  .nav-links button{
+    font-family:var(--font-display);
+    font-size:0.85rem;
+    font-weight:600;
+    border:none; background:transparent; color:var(--ink-soft);
+    padding:9px 18px; border-radius:999px; cursor:pointer;
+    transition:all 0.25s ease;
+  }
+  .nav-links button:hover{color:var(--ink);}
+  .nav-links button.active{
+    background:linear-gradient(135deg, var(--violet), var(--violet-deep));
+    color:#fff;
+  }
+  .nav-links button:focus-visible, a:focus-visible, .char-card:focus-visible{
+    outline:2px solid var(--pink); outline-offset:2px;
+  }
+
+  main{padding-top:78px;}
+  .page{display:none; animation:fadein 0.5s ease;}
+  .page.active{display:block;}
+  @keyframes fadein{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+
+  .wrap{max-width:1080px; margin:0 auto; padding:0 28px;}
+  section{padding:64px 0;}
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:0.72rem;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--violet-deep);
+    font-weight:700;
+    display:flex; align-items:center; gap:8px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{content:''; width:22px; height:2px; background:var(--pink); display:inline-block;}
+
+  h1,h2,h3{font-family:var(--font-display); letter-spacing:-0.01em;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    padding:90px 0 70px;
+    overflow:hidden;
+  }
+  .cyclone-orb{
+    position:absolute; top:-220px; right:-220px;
+    width:560px; height:560px; border-radius:50%;
+    background:conic-gradient(from 0deg, var(--violet), var(--cyan), var(--pink), var(--violet));
+    filter:blur(60px); opacity:0.35;
+    animation:spin 20s linear infinite;
+  }
+  .hero-inner{position:relative; z-index:1;}
+  .hero h1{
+    font-size:clamp(2.6rem, 7vw, 5rem);
+    font-weight:700;
+    line-height:0.98;
+    background:linear-gradient(120deg, var(--ink) 40%, var(--violet-deep) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero-sub{
+    margin-top:20px; max-width:560px;
+    font-size:1.08rem; color:var(--ink-soft);
+  }
+  .hero-tags{display:flex; flex-wrap:wrap; gap:10px; margin-top:28px;}
+  .tag{
+    font-family:var(--font-mono); font-size:0.78rem;
+    padding:7px 14px; border-radius:999px;
+    background:var(--white); border:1px solid var(--line); color:var(--ink-soft);
+  }
+
+  .stat-row{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(140px,1fr));
+    gap:1px; background:var(--line);
+    border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;
+    margin-top:48px;
+  }
+  .stat-cell{background:var(--white); padding:22px 20px;}
+  .stat-num{font-family:var(--font-mono); font-size:1.8rem; font-weight:700; color:var(--violet-deep);}
+  .stat-label{font-size:0.82rem; color:var(--ink-soft); margin-top:4px;}
+
+  /* ---------- GENERIC CARDS ---------- */
+  .card{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:26px;
+  }
+  .card h3{font-size:1.15rem; margin-bottom:10px;}
+  .card p{color:var(--ink-soft); font-size:0.95rem;}
+
+  .grid-3{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  .grid-2{display:grid; grid-template-columns:repeat(2,1fr); gap:18px;}
+  @media (max-width:760px){.grid-3, .grid-2{grid-template-columns:1fr;}}
+
+  .facade-icon, .rule-icon{
+    width:38px; height:38px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--bg-alt); color:var(--violet-deep); margin-bottom:14px;
+    font-family:var(--font-mono); font-weight:700;
+  }
+
+  .section-title{font-size:clamp(1.6rem,3.5vw,2.3rem); margin-bottom:10px;}
+  .section-desc{color:var(--ink-soft); max-width:640px; margin-bottom:36px;}
+
+  /* relationship list */
+  .rel-list{display:flex; flex-direction:column; gap:14px; margin-top:10px;}
+  .rel-item{
+    display:grid; grid-template-columns:170px 1fr; gap:18px;
+    padding:18px 20px; background:var(--white); border:1px solid var(--line); border-radius:14px;
+    align-items:start;
+  }
+  .rel-names{font-family:var(--font-mono); font-weight:700; color:var(--violet-deep); font-size:0.88rem;}
+  .rel-desc{color:var(--ink-soft); font-size:0.92rem;}
+  @media (max-width:640px){.rel-item{grid-template-columns:1fr;}}
+
+  /* ---------- CHARACTERS ---------- */
+  .char-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:16px;
+  }
+  .char-card{
+    background:var(--white); border:1px solid var(--line); border-radius:var(--radius);
+    padding:22px; cursor:pointer; text-align:left; width:100%;
+    transition:transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    position:relative; overflow:hidden;
+  }
+  .char-card:hover{transform:translateY(-4px); box-shadow:0 14px 30px -18px rgba(59,49,201,0.45); border-color:var(--violet);}
+  .char-card::after{
+    content:''; position:absolute; top:0; left:0; right:0; height:4px;
+    background:linear-gradient(90deg, var(--violet), var(--cyan));
+    transform:scaleX(0); transform-origin:left; transition:transform 0.3s ease;
+  }
+  .char-card:hover::after, .char-card.open::after{transform:scaleX(1);}
+  .char-top{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:10px;}
+  .char-name{font-family:var(--font-display); font-weight:700; font-size:1.15rem;}
+  .char-age{font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-soft); background:var(--bg-alt); padding:3px 9px; border-radius:8px;}
+  .char-role{color:var(--violet-deep); font-size:0.85rem; font-weight:600; margin-bottom:10px;}
+  .char-brief{font-size:0.86rem; color:var(--ink-soft);}
+  .char-detail{
+    max-height:0; overflow:hidden; transition:max-height 0.35s ease, margin-top 0.35s ease;
+    font-size:0.86rem; color:var(--ink-soft); border-top:1px dashed var(--line);
+  }
+  .char-card.open .char-detail{max-height:280px; margin-top:14px; padding-top:14px;}
+  .char-height{font-family:var(--font-mono); font-size:0.75rem; margin-top:12px; color:var(--ink-soft);}
+  .expand-hint{font-family:var(--font-mono); font-size:0.72rem; color:var(--cyan); margin-top:14px; letter-spacing:0.04em;}
+
+  /* height chart */
+  .height-chart{margin-top:56px;}
+  .h-row{display:grid; grid-template-columns:110px 1fr 50px; align-items:center; gap:12px; margin-bottom:10px;}
+  .h-name{font-family:var(--font-mono); font-size:0.8rem;}
+  .h-bar-track{background:var(--bg-alt); border-radius:8px; height:14px; overflow:hidden;}
+  .h-bar{height:100%; border-radius:8px; background:linear-gradient(90deg, var(--violet), var(--cyan));}
+  .h-val{font-family:var(--font-mono); font-size:0.78rem; color:var(--ink-soft); text-align:right;}
+
+  /* ---------- COMBAT ---------- */
+  .combat-card{
+    background:var(--ink); color:#EDEEFA; border-radius:var(--radius); padding:24px;
+    font-family:var(--font-mono);
+    border:1px solid #2A2C4E;
+  }
+  .combat-name{font-family:var(--font-display); font-size:1.2rem; font-weight:700; color:#fff; margin-bottom:14px; display:flex; align-items:center; gap:10px;}
+  .combat-name::before{content:'◆'; color:var(--cyan); font-size:0.9rem;}
+  .combat-row{margin-bottom:14px;}
+  .combat-tag{
+    display:inline-block; font-size:0.68rem; padding:3px 8px; border-radius:6px;
+    background:rgba(0,207,193,0.15); color:var(--cyan); margin-bottom:6px; letter-spacing:0.05em;
+  }
+  .combat-tag.dodge{background:rgba(255,92,138,0.15); color:var(--pink);}
+  .combat-text{font-size:0.82rem; line-height:1.65; color:#C7C9E6;}
+  .combat-limit{margin-top:14px; padding-top:14px; border-top:1px solid #2A2C4E; font-size:0.78rem; color:#9294BE;}
+  .combat-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-top:30px;}
+  @media (max-width:760px){.combat-grid{grid-template-columns:1fr;}}
+
+  footer{
+    text-align:center; padding:44px 20px 60px; color:var(--ink-soft); font-size:0.85rem;
+    font-family:var(--font-mono);
+  }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="brand"><span class="brand-mark"></span>COSMIC CYCLONE</div>
+  <div class="nav-links">
+    <button data-page="intro" class="active">บทนำ</button>
+    <button data-page="org">องค์กร</button>
+    <button data-page="characters">ตัวละคร</button>
+    <button data-page="combat">ระบบต่อสู้</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ================= INTRO ================= -->
+  <section class="page active" id="intro">
+    <div class="hero">
+      <div class="cyclone-orb"></div>
+      <div class="wrap hero-inner">
+        <div class="eyebrow">องค์กรลับ · ระดับความลับขั้นสูง</div>
+        <h1>COSMIC<br>CYCLONE</h1>
+        <p class="hero-sub">ในโลกที่เทคโนโลยีขั้นสูงถูกผูกขาดโดยกลุ่มทุนใหญ่ และอาชญากรรมพุ่งสูงเกินกว่าเจ้าหน้าที่รัฐจะรับมือไหว องค์กรอิสระนามว่า Cosmic Cyclone ถือกำเนิดขึ้นเพื่อปิดช่องว่างนั้น — เผชิญหน้ากับภัยคุกคามที่ไม่อาจอธิบายได้ด้วยวิทยาศาสตร์ทั่วไป ด้วยเทคโนโลยีล้ำสมัยและฝีมือเฉพาะตัวของสมาชิกแต่ละคน</p>
+        <div class="hero-tags">
+          <span class="tag">Interdimensional Threats</span>
+          <span class="tag">Technological Disparity</span>
+          <span class="tag">Shadow Organization</span>
+        </div>
+
+        <div class="stat-row">
+          <div class="stat-cell"><div class="stat-num">08</div><div class="stat-label">สมาชิกปฏิบัติการ</div></div>
+          <div class="stat-cell"><div class="stat-num">03</div><div class="stat-label">ฐานปฏิบัติการหลัก</div></div>
+          <div class="stat-cell"><div class="stat-num">50–200</div><div class="stat-label">หน่วยศัตรูต่อภารกิจ</div></div>
+          <div class="stat-cell"><div class="stat-num">10s</div><div class="stat-label">ช่องจังหวะเปิดมิติ</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wrap">
+      <section>
+        <div class="eyebrow">บทสรุปโลก</div>
+        <h2 class="section-title">ความเหลื่อมล้ำที่กลายเป็นอาวุธ</h2>
+        <p class="section-desc" style="max-width:720px;">สังคมปัจจุบันตกอยู่ใน "ภาวะย้อนแย้งทางเทคโนโลยี" — เทคโนโลยีระดับสูงมีราคาสูงเกินกว่าประชาชนทั่วไปจะเข้าถึง ทำให้กลุ่มอาชญากรที่มีทรัพยากรมากพอสามารถสร้างความได้เปรียบเหนือรัฐ Cosmic Cyclone จึงก่อตั้งขึ้นเพื่อวิจัยและทำลายภัยคุกคามที่ไม่เป็นธรรมชาติเหล่านี้ โดยเริ่มจากการรับสมาชิกแบบเปิดเผย ก่อนวิวัฒนาการสู่ระบบชักชวนแบบปากต่อปากเพื่อป้องกันการแทรกซึม</p>
+      </section>
+    </div>
+  </section>
+
+  <!-- ================= ORG ================= -->
+  <section class="page" id="org">
+    <div class="wrap">
+      <section style="padding-top:36px;">
+        <div class="eyebrow">โครงสร้างพื้นฐาน</div>
+        <h2 class="section-title">ฉากบังหน้า ฐานทัพ และการเคลื่อนที่</h2>
+        <p class="section-desc">องค์กรออกแบบให้กลมกลืนไปกับสังคมเมืองอย่างแนบเนียน แบ่งออกเป็นสามส่วนหลัก</p>
+
+        <div class="grid-3">
+          <div class="card">
+            <div class="facade-icon">01</div>
+            <h3>Facade Operations</h3>
+            <p>อู่ซ่อมรถยนต์และร้านอาหารตามสั่ง ทำหน้าที่เป็นฉากบังหน้า จุดตรวจการณ์ และช่องทางเข้า-ออกของสมาชิก</p>
+          </div>
+          <div class="card">
+            <div class="facade-icon">02</div>
+            <h3>Subterranean HQ</h3>
+            <p>ฐานทัพใต้ดินที่รวมศูนย์วิจัยเทคโนโลยี คลังแสง และห้องยุทธการไว้ในที่เดียว</p>
+          </div>
+          <div class="card">
+            <div class="facade-icon">03</div>
+            <h3>Tactical Mobility</h3>
+            <p>ยานพาหนะสนับสนุนการรบ ติดตั้งระบบสื่อสารและเซนเซอร์ตรวจจับระดับสูงสำหรับภารกิจระยะไกล</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="eyebrow">กฎเกณฑ์ภายใน</div>
+        <h2 class="section-title">มาตรฐานความปลอดภัยและวัฒนธรรมองค์กร</h2>
+        <div class="grid-2">
+          <div class="card">
+            <div class="rule-icon">⌁</div>
+            <h3>Abolition of Seniority</h3>
+            <p>ยกเลิกการเรียกชื่อตามลำดับอายุ เพื่อเพิ่มความคล่องตัวในการสั่งการและลดช่องว่างระหว่างบุคคล</p>
+          </div>
+          <div class="card">
+            <div class="rule-icon">⌁</div>
+            <h3>Universal Self-Defense Standard</h3>
+            <p>สมาชิกทุกคนต้องผ่านการฝึกศิลปะการต่อสู้และพกปืนประจำกายอย่างน้อย 1 กระบอกตลอดเวลา</p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div class="eyebrow">พลวัตภายในทีม</div>
+        <h2 class="section-title">ความสัมพันธ์ที่ประคองทีมไว้ด้วยกัน</h2>
+        <p class="section-desc">ท่ามกลางแรงกดดันสูง องค์กรใช้ความสัมพันธ์ที่ยืดหยุ่นเป็นเครื่องมือรักษาสุขภาพจิตของสมาชิก</p>
+        <div class="rel-list">
+          <div class="rel-item"><div class="rel-names">SIN × MIN</div><div class="rel-desc">ความสัมพันธ์เชิงคนรักที่ส่งผลบวกต่อสภาวะอารมณ์ของ Sin ทำให้เธอเริ่มเปิดใจและมีปฏิสัมพันธ์กับทีมมากขึ้น</div></div>
+          <div class="rel-item"><div class="rel-names">MIN · FREN · SOYA</div><div class="rel-desc">Min และ Fren เป็นเพื่อนสมัยมัธยม ผูกพันกันแน่นแฟ้น เสริมด้วย Soya กลายเป็นกลุ่มสนับสนุนหลักที่ใช้มุกตลกและการหยอกล้อรักษาสุขภาพจิตทีม</div></div>
+          <div class="rel-item"><div class="rel-names">SOYA × KUSASHI</div><div class="rel-desc">ความสัมพันธ์ที่กำลังเติบโต ผ่านการหยอกล้อและการแสดงออกที่ดูเหมือนรำคาญแต่แฝงด้วยความเข้าอกเข้าใจ</div></div>
+          <div class="rel-item"><div class="rel-names">FREN × IZURU</div><div class="rel-desc">ความรู้สึกดีต่อกันที่ยังคงรักษาระยะห่างที่เป็นทางการ</div></div>
+        </div>
+      </section>
+
+      <section>
+        <div class="eyebrow">กรณีศึกษาปฏิบัติการ</div>
+        <h2 class="section-title">การรับมือกองกำลังโคลนนิ่งข้ามมิติ</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Ground Unit</h3>
+            <p>Zack, Sin, Izuru, Kusashi เข้าปะทะภาคพื้นดินเพื่อดึงความสนใจและควบคุมพื้นที่</p>
+          </div>
+          <div class="card">
+            <h3>Aerial Support</h3>
+            <p>Min, Himeko, Fren, Soya บังคับยานสนับสนุนและโดรนสำรวจเพื่อค้นหาจุดอ่อนของศัตรู</p>
+          </div>
+        </div>
+        <p class="section-desc" style="margin-top:18px;">จากการสำรวจของ Min พบว่าศัตรูใช้เทคโนโลยีเปิดมิติที่สร้างจังหวะขาดตอนของกำลังพลโคลนนิ่งราว 10 วินาที ทีมจึงใช้ยุทธวิธี Combined Strike — สไนเปอร์ คลื่นดาบ ระเบิด และเลเซอร์ — โจมตีอุปกรณ์ต้นกำเนิดพร้อมกันจนปิดประตูมิติได้สำเร็จ</p>
+      </section>
+    </div>
+  </section>
+
+  <!-- ================= CHARACTERS ================= -->
+  <section class="page" id="characters">
+    <div class="wrap">
+      <section style="padding-top:36px;">
+        <div class="eyebrow">ฐานข้อมูลบุคลากร</div>
+        <h2 class="section-title">สมาชิก Cosmic Cyclone</h2>
+        <p class="section-desc">แตะการ์ดเพื่อดูรายละเอียดเพิ่มเติมของแต่ละคน</p>
+
+        <div class="char-grid" id="charGrid"></div>
+
+        <div class="height-chart">
+          <div class="eyebrow">ข้อมูลเปรียบเทียบ</div>
+          <h3 style="margin-bottom:22px;">ส่วนสูงสมาชิก (ซม.)</h3>
+          <div id="heightChart"></div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- ================= COMBAT ================= -->
+  <section class="page" id="combat">
+    <div class="wrap">
+      <section style="padding-top:36px;">
+        <div class="eyebrow">Counter-Response System</div>
+        <h2 class="section-title">ระบบป้องกันเชิงโต้ตอบ</h2>
+        <p class="section-desc">กลไก Perfect Block และ Perfect Dodge เฉพาะตัวของสมาชิกแต่ละคน ออกแบบมาเพื่อสร้างข้อได้เปรียบทางยุทธวิธี</p>
+
+        <div class="combat-grid" id="combatGrid"></div>
+      </section>
+    </div>
+  </section>
+
+</main>
+
+<footer>COSMIC CYCLONE — CLASSIFIED DOSSIER · เอกสารนี้จัดทำขึ้นเพื่อการพัฒนาเรื่องราวเท่านั้น</footer>
+
+<script>
+  // ---------- nav switching ----------
+  const navButtons = document.querySelectorAll('.nav-links button');
+  const pages = document.querySelectorAll('.page');
+  navButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      navButtons.forEach(b=>b.classList.remove('active'));
+      pages.forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.page).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // ---------- character data ----------
+  const characters = [
+    {name:"Himeko", gender:"♀", age:34, role:"ผู้ก่อตั้ง · แหล่งเงินทุน", brief:"ปืน Uzi คู่, มีด Butterfly", detail:"ภายนอกใจดีและแยกแยะเวลางานชัดเจน แต่เด็กในละแวกฐานทัพมักเรียกว่า \"ป้า\" ซึ่งขัดกับภาพลักษณ์ผู้บัญชาการ", height:170},
+    {name:"Zack", gender:"♂", age:13, role:"หุ่นยนต์ผู้พิทักษ์ (AI)", brief:"แขนแปลงเป็นอาวุธ, Jetpack, เซนเซอร์ตรวจจับ", detail:"รูปลักษณ์ถูกออกแบบให้ดูเก่าทรุดโทรมเพื่อพรางตัว ภายในบรรจุเทคโนโลยีตรวจจับระดับสูงและมีโหมดคลุ้มคลั่ง (Berserk Mode)", height:220},
+    {name:"Izuru Imiya", gender:"♂", age:27, role:"หน่วยรบแนวหน้า", brief:"ศิลปะการต่อสู้, ปืนพก", detail:"สรีระสูงใหญ่ 190 ซม. โดดเด่นด้านการต่อสู้ระยะประชิด และมีความเชี่ยวชาญด้านการทำอาหารระดับสูง", height:180},
+    {name:"Sin Valentine", gender:"♀", age:25, role:"เอซประจำทีม", brief:"ดาบโนดาจิ, Desert Eagle", detail:"บุคลิกนิ่งขรึมและรวดเร็ว มีดวงตาที่มองทะลุสิ่งมีชีวิตได้", height:180},
+    {name:"Min", gender:"♂", age:22, role:"ฝ่ายเทคนิค · วิศวกรรมระบบ", brief:"ดาบแฮ็กเกอร์ (Windows), ข้อมือคีย์บอร์ด", detail:"นิสัยรักสนุกและชื่นชอบดนตรี ใช้อุปกรณ์รบกวนสัญญาณศัตรูได้อย่างชำนาญ", height:171},
+    {name:"Fren", gender:"♀", age:21, role:"วางแผน · จัดการเอกสาร", brief:"ปืน Uzi, ศิลปะการต่อสู้", detail:"ใช้เวลาส่วนใหญ่กับงานธุรการ แต่มีความสำคัญเชิงยุทธศาสตร์สูง", height:160},
+    {name:"Soya", gender:"♀", age:20, role:"โปรแกรมเมอร์อัจฉริยะ", brief:"โดรนจู่โจม, ปืน G18", detail:"ผมสีฟ้า ตารูปหัวใจ นิสัยขี้เล่นและลามกเล็กน้อย มักใช้มุกตลกลดความตึงเครียดในทีม", height:160},
+    {name:"Kusashi", gender:"♂", age:19, role:"ผู้ปกป้องแนวหน้า", brief:"เคียว, ระเบิดสารพัดประโยชน์", detail:"บุคลิกนักเลงที่รักพวกพ้องอย่างรุนแรง พร้อมเสียสละเป็นด่านแรกเสมอ", height:167},
+  ];
+
+  const charGrid = document.getElementById('charGrid');
+  characters.forEach(c=>{
+    const el = document.createElement('button');
+    el.className = 'char-card';
+    el.innerHTML = `
+      <div class="char-top">
+        <div class="char-name">${c.name} ${c.gender}</div>
+        <div class="char-age">${c.age} ปี</div>
+      </div>
+      <div class="char-role">${c.role}</div>
+      <div class="char-brief">${c.brief}</div>
+      <div class="char-detail">${c.detail}<div class="char-height">ส่วนสูง ${c.height} ซม.</div></div>
+      <div class="expand-hint">แตะเพื่อดูเพิ่มเติม ↓</div>
+    `;
+    el.addEventListener('click', ()=> el.classList.toggle('open'));
+    charGrid.appendChild(el);
+  });
+
+  // ---------- height chart ----------
+  const heightChart = document.getElementById('heightChart');
+  const maxH = Math.max(...characters.map(c=>c.height));
+  [...characters].sort((a,b)=>b.height-a.height).forEach(c=>{
+    const row = document.createElement('div');
+    row.className = 'h-row';
+    row.innerHTML = `
+      <div class="h-name">${c.name}</div>
+      <div class="h-bar-track"><div class="h-bar" style="width:${(c.height/maxH*100).toFixed(0)}%"></div></div>
+      <div class="h-val">${c.height}</div>
+    `;
+    heightChart.appendChild(row);
+  });
+
+  // ---------- combat data ----------
+  const combat = [
+    {name:"Sin Valentine", block:"มานาเพิ่ม 15 หน่วย ตีแรงขึ้นเล็กน้อยและตีเร็วขึ้น", dodge:"มานาเพิ่ม 10 หน่วย · ถ้าอยู่ในร่างปีศาจ จะกินมานาน้อยลงขณะแปลงร่าง และมี \"Soul\" ช่วยโจมตี 1 ครั้งตามท่าที่กำหนด", limit:null},
+    {name:"Min", block:"หลอด Concentration +30 (เต็ม 300) — เต็มแล้วเปลี่ยนร่างได้ ช่วงต้นเกมยังไม่มีผลพิเศษ เริ่มแสดงพลังตอนกลางเกม", dodge:"เห็นทุกอย่างช้าลง 3 วินาที การโจมตีครั้งต่อไปแรงขึ้น 5% (10% หากอยู่ในสถานะเปลี่ยนร่าง)", limit:null},
+    {name:"Kusashi", block:"หลอด Courage +1 (เต็ม 5) และมานา +10", dodge:"โจมตีเป้าหมายที่พึ่งหลบทันที ความเสียหายเพิ่มตามหลอด Courage", limit:null},
+    {name:"Himeko", block:"มานา +20 และสร้างความเสียหาย หากศัตรูมีเกราะจะแตกทันทีไม่ว่าจะเหลือเท่าไหร่", dodge:"ผลเดียวกับ Perfect Block", limit:null},
+    {name:"Izuru", block:"การโจมตีทั้งหมดเสริมพลังโดยไม่กินมานา 5 วินาที (สแต็กได้)", dodge:"สังหารศัตรูทั่วไปทันที ส่วนบอส/ศัตรูระดับสูงจะสะท้อนดาเมจตามที่ศัตรูตีมา", limit:null},
+    {name:"Zack", block:"หลอด Gas (โหมดคลั่ง) +1 (สูงสุด 8) ศัตรูสตันเป็นเวลา 2 วินาที และติดดีบัฟ \"ความกลัว\"", dodge:"ไม่สามารถ Perfect Dodge ได้ — เปลี่ยนเป็นเพิ่มความเร็วเคลื่อนที่แทน", limit:"ขาดความคล่องตัวในการหลบหลีกเนื่องจากโครงสร้างขนาดใหญ่"},
+    {name:"Fren", block:"ศัตรู (ที่ไม่ใช่บอส) กระเด็นออกไปนอกระยะโจมตี พร้อมได้รับบัฟ \"ความพยายาม\" เสริมแรงศิลปะการต่อสู้", dodge:"วิ่งเร็วขึ้น การโจมตีด้วยศิลปะการต่อสู้มีโอกาสสตันศัตรู 1 วิ หรือเพิ่มดาเมจหากใช้ปืน", limit:"ไม่สามารถ Perfect Block ใส่บอสได้ เนื่องจากภาระงานหลักเน้นด้านเอกสาร"},
+    {name:"Soya", block:"ศัตรูสตันและเสียหายเป็นวงกว้าง (ไม่มีผลสตันกับบอส) หลัง Block ต้องรอโล่รีชาร์จก่อนจึง Block ได้อีกครั้ง", dodge:"โล่รีชาร์จเสร็จทันที พร้อมสร้างความเสียหายใส่ศัตรู", limit:null},
+  ];
+
+  const combatGrid = document.getElementById('combatGrid');
+  combat.forEach(c=>{
+    const el = document.createElement('div');
+    el.className = 'combat-card';
+    el.innerHTML = `
+      <div class="combat-name">${c.name}</div>
+      <div class="combat-row">
+        <span class="combat-tag">PERFECT BLOCK</span>
+        <div class="combat-text">${c.block}</div>
+      </div>
+      <div class="combat-row">
+        <span class="combat-tag dodge">PERFECT DODGE</span>
+        <div class="combat-text">${c.dodge}</div>
+      </div>
+      ${c.limit ? `<div class="combat-limit">⚠ ข้อจำกัด: ${c.limit}</div>` : ''}
+    `;
+    combatGrid.appendChild(el);
+  });
+</script>
+
+</body>
+</html>
